@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "target": "es6",
+    "module": "commonjs",
+    "outDir": "build",
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "lib": [
+      "ES6",
+      "ESNext.AsyncIterable"
+    ]
+  },
+  "include": ["index.ts"]
+}
