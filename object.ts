@@ -1,3 +1,4 @@
+//tslint:disable
 import SyncF from './sync';
 
 export default class ObjectF<T extends object> {

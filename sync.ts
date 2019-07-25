@@ -1,7 +1,8 @@
+//tslint:disable
 import AsyncF from './async';
 
 export default class F<T> implements Iterable<T> {
-	[Symbol.iterator] = this.iterator[Symbol.iterator];
+	[Symbol.iterator] = () => this.iterator[Symbol.iterator]();
 
 	constructor(private readonly iterator: Iterable<T>) {
 	}

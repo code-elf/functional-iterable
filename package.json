@@ -1,6 +1,6 @@
 {
   "name": "functional-iterable",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Helper for interacting with Iterables in a functional manner.",
   "main": "build/index.js",
   "repository": "https://github.com/MayaWolf/functional-iterables",
@@ -11,5 +11,8 @@
   },
   "dependencies": {
     "typescript": "^3.5.3"
+  },
+  "peerDependencies": {
+    "tslib": "^1.10.0"
   }
 }

@@ -3,6 +3,8 @@
     "target": "es6",
     "module": "commonjs",
     "outDir": "build",
+    "noEmitHelpers": true,
+    "importHelpers": true,
     "forceConsistentCasingInFileNames": true,
     "strict": true,
     "noUnusedLocals": true,

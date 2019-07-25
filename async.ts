@@ -1,5 +1,6 @@
+//tslint:disable
 export default class F<T> implements AsyncIterable<T> {
-    [Symbol.asyncIterator] = this.iterator[Symbol.asyncIterator];
+    [Symbol.asyncIterator] = () => this.iterator[Symbol.asyncIterator]();
 
     constructor(private readonly iterator: AsyncIterable<T>) {
     }
