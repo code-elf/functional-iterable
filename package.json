@@ -1,9 +1,9 @@
 {
   "name": "functional-iterable",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Helper for interacting with Iterables in a functional manner.",
   "main": "build/index.js",
-  "repository": "https://github.com/MayaWolf/functional-iterables",
+  "repository": "https://github.com/MayaWolf/functional-iterable",
   "license": "MIT",
   "author": "MayaWolf",
   "scripts": {

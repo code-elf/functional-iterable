@@ -43,6 +43,12 @@ export default class F<T> implements Iterable<T> {
 		})(this.iterator));
 	}
 
+	first(fn?: (item: T) => boolean): T | undefined {
+		for(const item of this.iterator)
+			if(!fn || fn(item))
+				return item;
+	}
+
 	flatMap<U>(fn: (item: T) => Iterable<U> | undefined): F<U> {
 		return new F((function* (items) {
 			for(const item of items) {

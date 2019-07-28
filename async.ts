@@ -25,22 +25,28 @@ export default class F<T> implements AsyncIterable<T> {
         return count;
     }
 
-    flatMap<U>(fn: (item: T) => Iterable<U> | undefined): F<U> {
-        return new F((async function* (items) {
-            for await(const item of items) {
-                const value = fn(item);
-                if(value)
-                    yield* value;
-            }
-        })(this.iterator));
-    }
-
     filter(fn?: (item: T) => Promise<boolean> | boolean): F<T> {
         if(!fn) fn = (x) => !!x;
         return new F((async function* (items) {
             for await(const item of items) {
                 if(await fn(item))
                     yield item;
+            }
+        })(this.iterator));
+    }
+
+    async first(fn?: (item: T) => Promise<boolean> | boolean): Promise<T | undefined> {
+        for await(const item of this.iterator)
+            if(!fn || fn(item))
+                return item;
+    }
+
+    flatMap<U>(fn: (item: T) => AsyncIterable<U> | Iterable<U> | undefined | Promise<Iterable<U> | undefined>): F<U> {
+        return new F((async function* (items) {
+            for await(const item of items) {
+                const value = await fn(item);
+                if(value)
+                    yield* value;
             }
         })(this.iterator));
     }

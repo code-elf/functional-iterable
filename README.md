@@ -46,6 +46,9 @@ Returns a new Iterable that only contains entries that match the given predicate
 ### `flatMap<U>(fn: (item: T) => Iterable<U> | undefined): Iterable<U>`
 Returns a new Iterable containing any number of items for each element of the current one.
 
+### `first(fn?: (item: T) => boolean): T | undefined`
+Returns the first element to match the given callback, or the first element if none is given.
+
 ### `includes(item: T): boolean`
 Returns whether the given element exists within the iterable.
 
