@@ -11,7 +11,10 @@ export default class F<T> implements AsyncIterable<T> {
         return true;
     }
 
+    concat<U>(other: Iterable<U> | AsyncIterable<U>): F<T | U>
+    concat<U>(...other: U[]): F<T | U>
     concat<U>(other: Iterable<U> | AsyncIterable<U>): F<T | U> {
+        if(!(other as Iterable<U>)[Symbol.iterator] && !(other as AsyncIterable<U>)[Symbol.asyncIterator]) other = arguments;
         return new F((async function* (items) {
             yield* items;
             yield* other;
@@ -25,6 +28,8 @@ export default class F<T> implements AsyncIterable<T> {
         return count;
     }
 
+    filter<U extends T>(fn?: (item: T) => item is U): F<U>
+    filter(fn?: (item: T) => Promise<boolean> | boolean): F<T>
     filter(fn?: (item: T) => Promise<boolean> | boolean): F<T> {
         if(!fn) fn = (x) => !!x;
         return new F((async function* (items) {
@@ -68,10 +73,27 @@ export default class F<T> implements AsyncIterable<T> {
         return current;
     }
 
+    skip(count: number): F<T> {
+        return new F((async function* (items) {
+            for await(const item of items)
+                if(count-- <= 0)
+                    yield item;
+        })(this.iterator));
+    }
+
     async some(fn: (item: T) => Promise<boolean> | boolean): Promise<boolean> {
         for await(const item of this.iterator)
             if(await fn(item)) return true;
         return false;
+    }
+
+    take(count: number): F<T> {
+        return new F((async function* (items) {
+            for await(const item of items) {
+                if(count-- <= 0) return;
+                yield item;
+            }
+        })(this.iterator));
     }
 
     async toArray(): Promise<T[]> {

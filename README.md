@@ -34,7 +34,7 @@ Returns true if all elements match the condition.
 ### `async(): AsyncIterable<T>`
 Only on synchronous iterables - converts to an asynchronous iterable.
 
-### `concat<U>(other: Iterable<U>): Iterable<T | U>`
+### `concat<U>(other: Iterable<U> | ...U): Iterable<T | U>`
 Returns a new Iterable that iterates first over the entries in `this`, then over those of `other`.
 
 ### `count(fn?: (item: T) => boolean): number`
@@ -58,8 +58,14 @@ Returns a new Iterable with the entries of the current one modified by the given
 ### `reduce<U>(fn: (current: U, item: T) => U, current: U): U`
 Reduces the Iterable to a single value with a given accumulator function and starting value.
 
+### `skip(count: number): Iterable<T>`
+Returns a new Iterable that iterates over and discards the given number of elements, then continues executing normally.
+
 ### `some(fn: (item: T) => boolean): boolean`
 Returns true if at least one element matches the condition.
+
+### `take(count: number): Iterable<T>`
+Returns a new Iterable that stops after returning at most the given number of elements.
 
 ### `toArray(): T[]`
 Returns an array of all the entries in the Iterable.

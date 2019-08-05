@@ -19,7 +19,10 @@ export default class F<T> implements Iterable<T> {
 		})(this.iterator));
 	}
 
+	concat<U>(other: Iterable<U>): F<T | U>
+	concat<U>(...other: U[]): F<T | U>
 	concat<U>(other: Iterable<U>): F<T | U> {
+		if(!other[Symbol.iterator]) other = arguments;
 		return new F((function* (items) {
 			yield* items;
 			yield* other;
@@ -33,6 +36,8 @@ export default class F<T> implements Iterable<T> {
 		return count;
 	}
 
+	filter<U extends T>(fn?: (item: T) => item is U): F<U>
+	filter(fn?: (item: T) => boolean): F<T>
 	filter(fn?: (item: T) => boolean): F<T> {
 		if(!fn) fn = (x) => !!x;
 		return new F((function* (items) {
@@ -76,10 +81,27 @@ export default class F<T> implements Iterable<T> {
 		return current;
 	}
 
+	skip(count: number): F<T> {
+		return new F((function* (items) {
+			for(const item of items)
+				if(count-- <= 0)
+					yield item;
+		})(this.iterator));
+	}
+
 	some(fn: (item: T) => boolean): boolean {
 		for(const item of this.iterator)
 			if(fn(item)) return true;
 		return false;
+	}
+
+	take(count: number): F<T> {
+		return new F((function* (items) {
+			for(const item of items) {
+				if(count-- <= 0) return;
+				yield item;
+			}
+		})(this.iterator));
 	}
 
 	toArray(): T[] {
