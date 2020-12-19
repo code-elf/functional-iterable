@@ -103,17 +103,3 @@ Returns an Iterable that includes all the numbers in the (inclusive) range defin
 
 ### `f.while<T>(fn: () => T): Iterable<T>`
 Returns an Iterable that calls the given function repeatedly and yields the result unless and until it is falsy.
-
-## TypeScript
-While it's possible to include this module normally in TypeScript, it's recommended you add it to your tsconfig like so:
-```
-{
-     "compilerOptions": {
-       ...
-     },
-     "include": [..., "node_modules/functional-iterable"]
-   }
-```
-For compatibility reasons, this module has been compiled at the ES6 level. If you're using a higher ES level in your project, recompiling this library will get rid of the TS helpers.
-
-Because this may cause TSLint to try to lint these files as well, `//tslint:disable` has been put at the top of all source files.

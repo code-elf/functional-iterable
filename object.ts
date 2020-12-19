@@ -1,7 +1,7 @@
 //tslint:disable
 import SyncF from './sync';
 
-export default class ObjectF<T extends object> {
+export default class ObjectF<T> {
 	constructor(private readonly value: T) {
 	}
 
@@ -13,6 +13,7 @@ export default class ObjectF<T extends object> {
 	}
 
 	keys(): SyncF<keyof T> {
+		if(Array.isArray(this.value)) return new SyncF(this.value.keys()) as SyncF<keyof T>;
 		return new SyncF((function* (value: T) {
 			for(const key in value)
 				yield key;
