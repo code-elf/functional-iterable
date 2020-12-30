@@ -1,7 +1,4 @@
-//tslint:disable
-import AsyncF from './async';
-
-export default class F<T> implements Iterable<T> {
+export class F<T> implements Iterable<T> {
 	[Symbol.iterator] = () => this.iterator[Symbol.iterator]();
 
 	constructor(private readonly iterator: Iterable<T>) {
@@ -11,12 +8,6 @@ export default class F<T> implements Iterable<T> {
 		for(const item of this.iterator)
 			if(!fn(item)) return false;
 		return true;
-	}
-
-	async(): AsyncF<T> {
-		return new AsyncF<T>((async function* (items) {
-			yield* items;
-		})(this.iterator));
 	}
 
 	concat<U>(other: Iterable<U>): F<T | U>
@@ -131,4 +122,27 @@ export default class F<T> implements Iterable<T> {
 			}
 		})(this.iterator));
 	}
+}
+
+export default function f<T>(iterable: Iterable<T>) {
+	return new F(iterable);
+}
+
+f.range = function(from: number, to: number): F<number> {
+	++to;
+	const sign = Math.sign(to - from);
+	return new F((function*() {
+		for(; from !== to; from += sign)
+			yield from;
+	})());
+}
+
+f.while = <T>(fn: () => T): F<NonNullable<T>> => {
+	let value = fn();
+	return new F<NonNullable<T>>((function*() {
+		while(value !== undefined && value !== null) {
+			yield value as NonNullable<T>;
+			value = fn();
+		}
+	})());
 }

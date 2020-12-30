@@ -1,5 +1,4 @@
-//tslint:disable
-export default class F<T> implements AsyncIterable<T> {
+class F<T> implements AsyncIterable<T> {
     [Symbol.asyncIterator] = () => this.iterator[Symbol.asyncIterator]();
 
     constructor(private readonly iterator: AsyncIterable<T>) {
@@ -130,3 +129,25 @@ export default class F<T> implements AsyncIterable<T> {
         })(this.iterator));
     }
 }
+
+function isAsync<T>(iterable: Iterable<T> | AsyncIterable<T> | object): iterable is AsyncIterable<T> {
+    return !!(iterable as AsyncIterable<T>)[Symbol.asyncIterator];
+}
+
+export default function f<T>(iterable: Iterable<T> | AsyncIterable<T>) {
+    if(isAsync(iterable)) return new F(iterable);
+    return new F<T>((async function* (items) {
+        yield* items;
+    })(iterable));
+}
+
+f.while = <T>(fn: () => T | Promise<T>): F<NonNullable<T>> => {
+    let value = fn();
+    return new F<NonNullable<T>>((async function* () {
+        let awaited;
+        while(awaited = await value) {
+            yield awaited as NonNullable<T>;
+            value = fn();
+        }
+    })());
+};

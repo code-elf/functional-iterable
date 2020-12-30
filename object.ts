@@ -1,7 +1,6 @@
-//tslint:disable
-import SyncF from './sync';
+import {F as SyncF} from './sync';
 
-export default class ObjectF<T> {
+export class ObjectF<T> {
 	constructor(private readonly value: T) {
 	}
 
@@ -33,4 +32,8 @@ export default class ObjectF<T> {
 				yield value[key];
 		})(this.value));
 	}
+}
+
+export default function f<T>(object: T): ObjectF<T> {
+	return new ObjectF<T>(object);
 }

@@ -1,6 +1,6 @@
 {
   "name": "functional-iterable",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Helper for interacting with Iterables in a functional manner.",
   "repository": "https://github.com/MayaWolf/functional-iterable",
   "license": "MIT",

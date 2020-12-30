@@ -7,7 +7,7 @@ It supports TypeScript and traditional JavaScript.
 
 ## Usage
 ```typescript
-import f from 'functional-iterable';
+import f, {fAsync} from 'functional-iterable';
 
 function* generator() {
 	for(const item of [1, 2, 3])
@@ -20,19 +20,16 @@ async function* asyncGenerator() {
 }
 
 f(generator()).map(x => x + 1).toArray(); //[2, 3, 4]
-f(asyncGenerator()).reduce((acc, x) => acc + x, 0) //Promise<6>
+fAsync(asyncGenerator()).reduce((acc, x) => acc + x, 0) //Promise<6>
 f([1, 2, 3]).all(x => x < 4); //true
 ```
 
 ## API
 The exported function `f()` wraps an Iterable and offers helper methods on it. For all chainable functions, the returned value is also an Iterable usable in a `for ... of` loop or anywhere they might be used.
 
-For async iterables, all methods return `Promise`s or `AsyncIterable`s and all callbacks may return `Promise`s (or `AsyncIterable` where applicable) for their respective values.
+For `fAsync`, all methods return `Promise`s or `AsyncIterable`s and all callbacks may return `Promise`s (or `AsyncIterable` where applicable) for their respective values.
 ### `all(fn: (item: T) => boolean): boolean`
 Returns true if all elements match the condition.
-
-### `async(): AsyncIterable<T>`
-Only on synchronous iterables - converts to an asynchronous iterable.
 
 ### `concat<U>(other: Iterable<U> | ...U): Iterable<T | U>`
 Returns a new Iterable that iterates first over the entries in `this`, then over those of `other`.
@@ -79,8 +76,8 @@ Returns a Set of all the entries in the Iterable.
 ### `unique<U>(fn?: (item: T) => U): Iterable<T>`
 Makes sure the value selected by the function only exists once. If no function is given, the entries themselves are made unique.
 
-## Passing an object
-For convenience, `f()` can also wrap plain objects. The following methods are then exposed.
+## Working with Objects
+To conveniently iterate over an object, import `fObj` which returns a wrapper with the following methods.
 
 ### `entries(): Iterable<[keyof T, T[keyof T]]>`
 Returns an Iterable where each element is a tuple containing key and value.
@@ -96,7 +93,7 @@ Returns an Iterable of the object's values.
 
 ## Helpers
 
-Helper functions are provided as properties of `f` to allow for easy creation of `Iterable`s. All callbacks may return `Promise`s to create an `AsyncIterable` instead.
+Helper functions are provided as properties of `f` to allow for easy creation of `Iterable`s.
 
 ### `f.range(from: number, to: number): Iterable<number>`
 Returns an Iterable that includes all the numbers in the (inclusive) range defined by the two given numbers.
